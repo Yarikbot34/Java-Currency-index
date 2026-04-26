@@ -1,6 +1,4 @@
-package org.example;
-
-import net.bytebuddy.implementation.ToStringMethod;
+package main;
 
 public class Currency {
     private String code;

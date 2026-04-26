@@ -1,4 +1,5 @@
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -8,9 +9,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import main.Currency;
 
 void main() throws Exception {
+    Scanner sc = new Scanner(System.in);
     String[] values = new String[] {"USD", "EUR", "CNY"};
     List<Currency> currencies = reqestCurrency(values);
     printCurrency(currencies);
+    boolean processed = true;
+    while (processed){
+        System.out.println("Введите 1 - Обновить данные | 0 - Выйти");
+        int userInput = sc.nextInt();
+        switch (userInput){
+            case 0:
+                processed = false;
+                break;
+            case 1:
+                System.out.print("\033[H\033[J");
+                printCurrency(currencies);
+                break;
+        }
+    }
 
 
 

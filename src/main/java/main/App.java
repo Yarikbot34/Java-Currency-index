@@ -10,13 +10,15 @@ import main.Currency;
 void main() throws Exception {
     String[] values = new String[] {"USD", "EUR", "CNY"};
     List<Currency> currencies = reqestCurrency(values);
+    printCurrency(currencies);
+
+
+
+}
+public void printCurrency(List<Currency> currencies){
     for (Currency i : currencies){
         System.out.println(i);
     }
-
-
-
-
 }
 
 public List<Currency> reqestCurrency(String[] values)throws Exception {

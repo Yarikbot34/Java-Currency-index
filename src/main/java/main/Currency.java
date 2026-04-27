@@ -1,5 +1,7 @@
 package main;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class Currency {
@@ -12,6 +14,7 @@ public class Currency {
             Map.entry("EUR", "Евро")
     );
     public static int nextUpdateTime = 0;
+    public static List<String> values = new ArrayList<String>();
 
     public Currency createCurr(String code, double index){
         if (code.length() == 3 && index > 0){

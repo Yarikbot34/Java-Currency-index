@@ -14,10 +14,11 @@ public class App {
 
     private static List<Currency> currencies;
 
+
     static void main() throws Exception {
+        Currency.values = List.of("EUR", "USD");
         Scanner sc = new Scanner(System.in);
-        String[] values = new String[]{"USD", "EUR", "CNY"};
-        currencies = reqestCurrency(values);
+        currencies = reqestCurrency();
         boolean processed = true;
         while (processed) {
             printCurrency();
@@ -28,7 +29,7 @@ public class App {
                     processed = false;
                     break;
                 case 1:
-                    reqestCurrency(values);
+                    reqestCurrency();
                     System.out.print("\033[H\033[J");
                     break;
             }
@@ -45,8 +46,13 @@ public class App {
         }
     }
 
-    public static List<Currency> reqestCurrency(String[] values) {
+    public static void redactValueList(){
+        System.out.println();
+    }
+
+    public static List<Currency> reqestCurrency() {
         if (Currency.nextUpdateTime < Instant.now().getEpochSecond()){
+            List<String> values = Currency.values;
             HttpClient client = HttpClient.newHttpClient();
             ObjectMapper mapper = new ObjectMapper();
             currencies = new ArrayList<>();

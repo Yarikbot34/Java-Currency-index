@@ -15,7 +15,6 @@ public class App {
     private static List<Currency> currencies;
 
     static void main() throws Exception {
-        Currency.values = List.of("EUR", "USD");
         Scanner sc = new Scanner(System.in);
         currencies = reqestCurrency();
         boolean processed = true;
@@ -52,13 +51,23 @@ public class App {
         boolean redactProcessed = true;
         Scanner sc = new Scanner(System.in);
         while (redactProcessed){
-            for (Currency obj: currencies){
-                System.out.println("Тег: " + obj.getCode() + "\tНазвание: " + obj.getName());
+            for (String obj: Currency.getNames().keySet()){
+                System.out.println("Тег: " + obj + "\tНазвание: " + Currency.getNames().get(obj));
             }
             System.out.println("Введите 1 - Для добавления валюты | 2 - Для удаления валюты | 0 - Для выхода");
             int userChoice = sc.nextInt();
             switch (userChoice){
                 case 1:
+                    System.out.print("Трехзначный индекс валюты: ");
+                    String index = sc.next().toUpperCase();
+                    sc.nextLine();
+                    if (index.length() != 3){
+                        System.out.println("Неверная длина индекса");
+                        break;
+                    }
+                    System.out.print("Отображаемое название: ");
+                    String name = sc.nextLine();
+                    Currency.addValue(index, name);
                     break;
                 case 2:
                     break;
@@ -71,8 +80,8 @@ public class App {
     }
 
     public static List<Currency> reqestCurrency() {
-        if (Currency.nextUpdateTime < Instant.now().getEpochSecond()){
-            List<String> values = Currency.values;
+        if (Currency.nextUpdateTime < Instant.now().getEpochSecond() || Currency.names.keySet().toArray(new String[0]) != Currency.lastValues){
+            List<String> values = new ArrayList<>(Currency.names.keySet());
             HttpClient client = HttpClient.newHttpClient();
             ObjectMapper mapper = new ObjectMapper();
             currencies = new ArrayList<>();
@@ -91,6 +100,7 @@ public class App {
                     currencies.add(cur);
                 }
                 Currency.nextUpdateTime = root.path("time_next_update_unix").asInt();
+                Currency.lastValues = values.toArray(new String[0]);
             } catch (Exception e) {
                 System.out.println("Ошибка при получении ответа сервера: " + e);
             }

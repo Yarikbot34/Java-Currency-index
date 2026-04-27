@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,11 +10,12 @@ public class Currency {
     private String name;
     private double index;
 
-    static Map<String, String> names = Map.ofEntries(
+    static Map<String, String> names = new HashMap<>(Map.ofEntries(
             Map.entry("USD", "Доллар"),
             Map.entry("EUR", "Евро")
-    );
+    ));
     public static int nextUpdateTime = 0;
+    public static String[] lastValues;
     public static List<String> values = new ArrayList<String>();
 
     public Currency createCurr(String code, double index){
@@ -33,6 +35,17 @@ public class Currency {
     }
     public String getName(){
         return this.name;
+    }
+    public static Map<String,String> getNames(){
+        return names;
+    }
+
+    public static void addValue(String key, String name){
+        if (key.length() == 3){
+                names.put(key, name);
+                values.add(key);
+                System.out.println("Значение записано");
+        }
     }
 
     @Override

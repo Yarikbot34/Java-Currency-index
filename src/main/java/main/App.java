@@ -54,13 +54,14 @@ public class App {
             for (String obj: Currency.getNames().keySet()){
                 System.out.println("Тег: " + obj + "\tНазвание: " + Currency.getNames().get(obj));
             }
-            System.out.println("Введите 1 - Для добавления валюты | 2 - Для удаления валюты | 0 - Для выхода");
+            System.out.println("Введите 1 - Для добавления/редактирования валюты | 2 - Для удаления валюты | 0 - Для выхода");
             int userChoice = sc.nextInt();
             switch (userChoice){
                 case 1:
                     Currency.addValue();
                     break;
                 case 2:
+                    Currency.delValue();
                     break;
                 case 0:
                     redactProcessed = false;

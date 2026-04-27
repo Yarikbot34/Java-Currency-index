@@ -51,6 +51,12 @@ public class Currency {
         names.put(key, name);
         values.add(key);
     }
+    public static void delValue(){
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Трехзначный индекс удаляемой валюты: ");
+        String key = sc.nextLine().toUpperCase();
+        if (names.containsKey(key)){names.remove(key);}
+    }
 
     @Override
     public String toString(){

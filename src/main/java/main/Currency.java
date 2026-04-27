@@ -28,6 +28,13 @@ public class Currency {
         }
     }
 
+    public String getCode(){
+        return this.code;
+    }
+    public String getName(){
+        return this.name;
+    }
+
     @Override
     public String toString(){
         return code + " " + name + "\t" + index;

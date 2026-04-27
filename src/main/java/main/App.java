@@ -14,7 +14,6 @@ public class App {
 
     private static List<Currency> currencies;
 
-
     static void main() throws Exception {
         Currency.values = List.of("EUR", "USD");
         Scanner sc = new Scanner(System.in);
@@ -32,6 +31,9 @@ public class App {
                     reqestCurrency();
                     System.out.print("\033[H\033[J");
                     break;
+                case 2:
+                    redactValueList();
+                    break;
             }
         }
     }
@@ -47,7 +49,25 @@ public class App {
     }
 
     public static void redactValueList(){
-        System.out.println();
+        boolean redactProcessed = true;
+        Scanner sc = new Scanner(System.in);
+        while (redactProcessed){
+            for (Currency obj: currencies){
+                System.out.println("Тег: " + obj.getCode() + "\tНазвание: " + obj.getName());
+            }
+            System.out.println("Введите 1 - Для добавления валюты | 2 - Для удаления валюты | 0 - Для выхода");
+            int userChoice = sc.nextInt();
+            switch (userChoice){
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 0:
+                    redactProcessed = false;
+                    break;
+            }
+
+        }
     }
 
     public static List<Currency> reqestCurrency() {

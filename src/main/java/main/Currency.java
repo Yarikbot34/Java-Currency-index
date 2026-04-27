@@ -37,24 +37,13 @@ public class Currency {
         return names;
     }
 
-    public static void addValue(){
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Трехзначный индекс валюты: ");
-        String key = sc.next().toUpperCase();
-        sc.nextLine();
-        if (key.length() != 3){
-            System.out.println("Неверная длина индекса");
-            return;
+    public static void addValue(String key, String name){
+        if (key.length() == 3){
+            names.put(key, name);
+            values.add(key);
         }
-        System.out.print("Отображаемое название: ");
-        String name = sc.nextLine();
-        names.put(key, name);
-        values.add(key);
     }
-    public static void delValue(){
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Трехзначный индекс удаляемой валюты: ");
-        String key = sc.nextLine().toUpperCase();
+    public static void delValue(String key){
         if (names.containsKey(key)){names.remove(key);}
     }
 

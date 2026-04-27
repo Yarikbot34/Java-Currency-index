@@ -4,9 +4,8 @@ import java.time.Instant;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Scanner;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -14,7 +13,7 @@ public class App {
 
     private static List<Currency> currencies;
 
-    static void main() throws Exception {
+    public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
         currencies = reqestCurrency();
         boolean processed = true;
@@ -28,7 +27,6 @@ public class App {
                     break;
                 case 1:
                     reqestCurrency();
-                    System.out.print("\033[H\033[J");
                     break;
                 case 2:
                     redactValueList();
@@ -58,10 +56,21 @@ public class App {
             int userChoice = sc.nextInt();
             switch (userChoice){
                 case 1:
-                    Currency.addValue();
+                    System.out.print("Трехзначный индекс валюты: ");
+                    String key = sc.next().toUpperCase();
+                    sc.nextLine();
+                    if (key.length() != 3){
+                        System.out.println("Неверная длина индекса");
+                        break;
+                    }
+                    System.out.print("Отображаемое название: ");
+                    String name = sc.nextLine();
+                    Currency.addValue(key, name);
                     break;
                 case 2:
-                    Currency.delValue();
+                    System.out.print("Трехзначный индекс удаляемой валюты: ");
+                    String delKey = sc.nextLine().toUpperCase();
+                    Currency.delValue(delKey);
                     break;
                 case 0:
                     redactProcessed = false;
@@ -72,7 +81,7 @@ public class App {
     }
 
     public static List<Currency> reqestCurrency() {
-        if (Currency.nextUpdateTime < Instant.now().getEpochSecond() || Currency.names.keySet().toArray(new String[0]) != Currency.lastValues){
+        if (Currency.nextUpdateTime < Instant.now().getEpochSecond() || !Arrays.equals(Currency.values.toArray(new String[0]), Currency.lastValues)){
             List<String> values = new ArrayList<>(Currency.names.keySet());
             HttpClient client = HttpClient.newHttpClient();
             ObjectMapper mapper = new ObjectMapper();

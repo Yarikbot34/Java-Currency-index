@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.ArrayList;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import main.Currency;
 
 public class App {
 
@@ -42,7 +41,7 @@ public class App {
         }
     }
 
-    public static List<Currency> reqestCurrency(String[] values) throws Exception {
+    public static List<Currency> reqestCurrency(String[] values) {
         if (Currency.nextUpdateTime < Instant.now().getEpochSecond()){
             HttpClient client = HttpClient.newHttpClient();
             ObjectMapper mapper = new ObjectMapper();
@@ -53,20 +52,18 @@ public class App {
                     .timeout(java.time.Duration.ofSeconds(5))
                     .GET()
                     .build();
-
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            JsonNode root = mapper.readTree(response.body());
-            for (String val : values) {
-                Currency cur = new Currency();
-                cur.createCurr(val, root.path("conversion_rates").path(val).asDouble());
-                currencies.add(cur);
+            try{
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                JsonNode root = mapper.readTree(response.body());
+                for (String val : values) {
+                    Currency cur = new Currency();
+                    cur.createCurr(val, root.path("conversion_rates").path(val).asDouble());
+                    currencies.add(cur);
+                }
+                Currency.nextUpdateTime = root.path("time_next_update_unix").asInt();
+            } catch (Exception e) {
+                System.out.println("Ошибка при получении ответа сервера: " + e);
             }
-
-            Currency.nextUpdateTime = root.path("time_next_update_unix").asInt();
-
-        }
-        else{
-            System.out.println("Запрос пропущен");
         }
         return currencies;
     }

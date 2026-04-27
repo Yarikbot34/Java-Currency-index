@@ -21,7 +21,7 @@ public class App {
         boolean processed = true;
         while (processed) {
             printCurrency();
-            System.out.println("Введите 1 - Обновить данные | 0 - Выйти");
+            System.out.println("Введите 1 - Обновить данные | 2 - Редактировать список валют | 0 - Выйти");
             int userInput = sc.nextInt();
             switch (userInput) {
                 case 0:
@@ -36,8 +36,12 @@ public class App {
     }
 
     public static void printCurrency() {
-        for (Currency i : currencies) {
-            System.out.println(i);
+        if (!currencies.isEmpty()) {
+            for (Currency i : currencies) {
+                System.out.println(i);
+            }
+        } else {
+            System.out.println("Нет данных для отображния");
         }
     }
 

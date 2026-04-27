@@ -15,7 +15,7 @@ public class App {
 
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
-        currencies = reqestCurrency();
+        currencies = requestCurrency();
         boolean processed = true;
         while (processed) {
             printCurrency();
@@ -26,7 +26,7 @@ public class App {
                     processed = false;
                     break;
                 case 1:
-                    reqestCurrency();
+                    requestCurrency();
                     break;
                 case 2:
                     redactValueList();
@@ -80,7 +80,7 @@ public class App {
         }
     }
 
-    public static List<Currency> reqestCurrency() {
+    public static List<Currency> requestCurrency() {
         if (Currency.nextUpdateTime < Instant.now().getEpochSecond() || !Arrays.equals(Currency.values.toArray(new String[0]), Currency.lastValues)){
             List<String> values = new ArrayList<>(Currency.names.keySet());
             HttpClient client = HttpClient.newHttpClient();

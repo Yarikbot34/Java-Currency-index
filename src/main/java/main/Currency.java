@@ -11,6 +11,7 @@ public class Currency {
             Map.entry("USD", "Доллар"),
             Map.entry("EUR", "Евро")
     );
+    public static int nextUpdateTime = 0;
 
     public Currency createCurr(String code, double index){
         if (code.length() == 3 && index > 0){

@@ -1,7 +1,6 @@
 package main;
-
 import java.net.URI;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -14,16 +13,15 @@ import main.Currency;
 
 public class App {
 
-
     private static List<Currency> currencies;
 
     static void main() throws Exception {
         Scanner sc = new Scanner(System.in);
         String[] values = new String[]{"USD", "EUR", "CNY"};
         currencies = reqestCurrency(values);
-        printCurrency();
         boolean processed = true;
         while (processed) {
+            printCurrency();
             System.out.println("Введите 1 - Обновить данные | 0 - Выйти");
             int userInput = sc.nextInt();
             switch (userInput) {
@@ -31,13 +29,11 @@ public class App {
                     processed = false;
                     break;
                 case 1:
+                    reqestCurrency(values);
                     System.out.print("\033[H\033[J");
-                    printCurrency();
                     break;
             }
         }
-
-
     }
 
     public static void printCurrency() {
@@ -47,22 +43,30 @@ public class App {
     }
 
     public static List<Currency> reqestCurrency(String[] values) throws Exception {
-        HttpClient client = HttpClient.newHttpClient();
-        ObjectMapper mapper = new ObjectMapper();
-        currencies = new ArrayList<>();
+        if (Currency.nextUpdateTime < Instant.now().getEpochSecond()){
+            HttpClient client = HttpClient.newHttpClient();
+            ObjectMapper mapper = new ObjectMapper();
+            currencies = new ArrayList<>();
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://v6.exchangerate-api.com/v6/66957f647ee253c5c43f65fa/latest/RUB"))
-                .timeout(java.time.Duration.ofSeconds(5))
-                .GET()
-                .build();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://v6.exchangerate-api.com/v6/66957f647ee253c5c43f65fa/latest/RUB"))
+                    .timeout(java.time.Duration.ofSeconds(5))
+                    .GET()
+                    .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        JsonNode root = mapper.readTree(response.body());
-        for (String val : values) {
-            Currency cur = new Currency();
-            cur.createCurr(val, root.path("conversion_rates").path(val).asDouble());
-            currencies.add(cur);
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            JsonNode root = mapper.readTree(response.body());
+            for (String val : values) {
+                Currency cur = new Currency();
+                cur.createCurr(val, root.path("conversion_rates").path(val).asDouble());
+                currencies.add(cur);
+            }
+
+            Currency.nextUpdateTime = root.path("time_next_update_unix").asInt();
+
+        }
+        else{
+            System.out.println("Запрос пропущен");
         }
         return currencies;
     }

@@ -58,16 +58,7 @@ public class App {
             int userChoice = sc.nextInt();
             switch (userChoice){
                 case 1:
-                    System.out.print("Трехзначный индекс валюты: ");
-                    String index = sc.next().toUpperCase();
-                    sc.nextLine();
-                    if (index.length() != 3){
-                        System.out.println("Неверная длина индекса");
-                        break;
-                    }
-                    System.out.print("Отображаемое название: ");
-                    String name = sc.nextLine();
-                    Currency.addValue(index, name);
+                    Currency.addValue();
                     break;
                 case 2:
                     break;

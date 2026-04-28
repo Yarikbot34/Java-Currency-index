@@ -49,7 +49,7 @@ public class Currency {
 
     @Override
     public String toString(){
-        return code + " " + name + "\t" + index;
+        return code + " " + name + "\t" + String.format("%.2f",index);
     }
 
 
